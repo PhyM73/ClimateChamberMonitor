@@ -44,19 +44,19 @@ args = parser.parse_args()
 def startManualRun(chamber,target=20.0,gradient=3,air=True,dryer=True):
   """Start manual run."""
   assert isinstance(target,float) or isinstance(target,int), "Target temperature (%s) is not a number!"%(target)
-  print "Setting up manual run with target temperature = %.1f and gradient %.1f K/min..."%(target,gradient)
+  print("Setting up manual run with target temperature = %.1f and gradient %.1f K/min..."%(target,gradient))
   chamber.sendSimServCmd('SET CTRL_VAR SETPOINT',[1,target])
   chamber.sendSimServCmd('SET GRAD_UP VAL', [1,gradient])
   chamber.sendSimServCmd('SET GRAD_DWN VAL',[1,gradient])
   chamber.sendSimServCmd('SET DIGI_OUT VAL', [7,int(air)]) # AIR1  ON
   chamber.sendSimServCmd('SET DIGI_OUT VAL',[8,int(dryer)])  # DRYER ON
-  print "Starting manual run..."
+  print("Starting manual run...")
   chamber.sendSimServCmd('START MANUAL',[1,1])
   
 
 def stopManualRun(chamber):
   """Stop manual run."""
-  print "Stopping manual run..."
+  print("Stopping manual run...")
   chamber.sendSimServCmd('START MANUAL',[1,0])
   
 
@@ -66,7 +66,7 @@ def main(args):
   args.batchmode = not checkGUIMode(args.batchmode)
   
   # CONNECT
-  print "Connecting to climate chamber..."
+  print("Connecting to climate chamber...")
   chamber = connectClimateChamber()
   ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
   ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
@@ -82,7 +82,7 @@ def main(args):
   stopManualRun(chamber)
   
   # DISCONNECT
-  print "Closing connection..."
+  print("Closing connection...")
   chamber.disconnect()
   disconnectYoctoMeteo()
   

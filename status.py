@@ -46,13 +46,13 @@ def getCurrentStatus(**kwargs):
   tformat  = '%d-%m-%Y %H:%M:%S'
   
   # CONNECT
-  print "Connecting to climate chamber..."
+  print("Connecting to climate chamber...")
   chamber = connectClimateChamber(ip=ip)
   ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
   ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
   
   # GET STATUS
-  print "Checking status..."
+  print("Checking status...")
   tnow = datetime.datetime.now()
   nalarms, nwarns, nmsgs = 0, 0, 0
   if chamber==None:
@@ -90,14 +90,14 @@ def getCurrentStatus(**kwargs):
     string  += addRow("Dewp. YM1:   %8s"%(dewp_YM1),
                       "Alarms:      %4d"%(nalarms))
     string  += addRow("Dewp. YM2:   %8s"%(dewp_YM2))
-  print "Status check finished!"
+  print("Status check finished!")
   
   # WRITE STATUS
   if logname:
     with open(logname,'w+') as logfile:
-      print "Writing to '%s'"%logname
-      print string
-      print "Writing status to '%s'..."%logname
+      print("Writing to '%s'"%logname)
+      print(string)
+      print("Writing status to '%s'..."%logname)
       logfile.write(string)
     if nalarms>0:
       messages = getActiveWarnings(chamber,type=1)
@@ -110,7 +110,7 @@ def getCurrentStatus(**kwargs):
       writeMessages(logname,messages,tag="messages")
   
   # DISCONNECT
-  print "Closing connection..."
+  print("Closing connection...")
   chamber.disconnect()
   disconnectYoctoMeteo()
   

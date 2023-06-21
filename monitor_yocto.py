@@ -46,7 +46,7 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
     # START MONITORING
     with open(logname,'a+') as logfile:
       logger = csv.writer(logfile)
-      print "Monitoring YoctoMeteo..."
+      print("Monitoring YoctoMeteo...")
       tval   = datetime.datetime.now()
       tstop  = tval + datetime.timedelta(seconds=dtime) if dtime>0 else None 
       if not ymeteo1:
@@ -55,7 +55,7 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
       if not ymeteo2:
         temp_YM2 = -1
         dewp_YM2 = -1
-      print "  %20s: %10s %10s %10s %10s"%("timestamp","temp YM1","temp YM2","dewp YM1","dewp YM2")
+      print("  %20s: %10s %10s %10s %10s"%("timestamp","temp YM1","temp YM2","dewp YM1","dewp YM2"))
       while not tstop or tstop>tval:
         tval    = datetime.datetime.now()
         if ymeteo1:
@@ -67,10 +67,10 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
         else:
           temp_YM2 = -1.
           dewp_YM2 = -1.
-        print "  %20s: %10.3f %10.3f %10.3f %10.3f"%(tval.strftime(tformat),temp_YM1,temp_YM2,dewp_YM1,dewp_YM2)
+        print("  %20s: %10.3f %10.3f %10.3f %10.3f"%(tval.strftime(tformat),temp_YM1,temp_YM2,dewp_YM1,dewp_YM2))
         logger.writerow([tval.strftime(tformat),temp_YM1,temp_YM2,dewp_YM1,dewp_YM2])
         time.sleep(tstep)
-      print "Monitoring finished!"
+      print("Monitoring finished!")
   
   # GUI WINDOW
   else:
@@ -80,7 +80,7 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
     tvals   = [ ]
     tempvals_YM1, tempvals_YM2, dewpvals_YM1, dewpvals_YM2 = [ ], [ ], [ ], [ ]
     if os.path.isfile(logname):
-      print "Loading old monitoring data from '%s'..."%(logname)
+      print("Loading old monitoring data from '%s'..."%(logname))
       with open(logname,'r') as logfile:
         logreader = csv.reader(logfile)
         tnow   = datetime.datetime.now()
@@ -170,8 +170,8 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
       zoomoutbutton.on_clicked(zoomout)
       
       # START MONITORING
-      print "Monitoring YoctoMeteo..."
-      print "  %20s: %10s %10s %10s %10s"%("timestamp","temp YM1","temp YM2","dewp YM1","dewp YM2")
+      print("Monitoring YoctoMeteo...")
+      print("  %20s: %10s %10s %10s %10s"%("timestamp","temp YM1","temp YM2","dewp YM1","dewp YM2"))
       tval  = datetime.datetime.now()
       tstop = tval + datetime.timedelta(seconds=dtime) if dtime>0 else None
       if not ymeteo1:
@@ -182,7 +182,7 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
         dewp_YM2 = -1
       while not tstop or tstop>tval:
         if not plt.fignum_exists(fig.number):
-          print "Monitor was closed!"
+          print("Monitor was closed!")
           break
         tval    = datetime.datetime.now()
         tvals.append(tval)
@@ -204,7 +204,7 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
           dewpline_YM2.set_ydata(dewpvals_YM2)
           templine_YM2.set_xdata(tvals)
           templine_YM2.set_ydata(tempvals_YM2)
-        print "  %20s: %10.3f %10.3f %10.3f %10.3f"%(tval.strftime(tformat),temp_YM1,temp_YM2,dewp_YM1,dewp_YM2)
+        print("  %20s: %10.3f %10.3f %10.3f %10.3f"%(tval.strftime(tformat),temp_YM1,temp_YM2,dewp_YM1,dewp_YM2))
         logger.writerow([tval.strftime(tformat),temp_YM1,temp_YM2,dewp_YM1,dewp_YM2])
         if (tval+dtmargin)>tmax:
           #print "  Resetting x-axis range..."
@@ -217,7 +217,7 @@ def monitor(ymeteo1=None,ymeteo2=None,**kwargs):
           plt.pause(twait)
         #time.sleep(tstep)
       
-      print "Monitoring finished!"
+      print("Monitoring finished!")
       plt.show(block=True)
       #plt.waitforbuttonpress()
   
@@ -239,7 +239,7 @@ def main(args):
   }
   
   # CONNECT
-  print "Connecting to YoctoMeteo..."
+  print("Connecting to YoctoMeteo...")
   ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
   ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
   
@@ -247,7 +247,7 @@ def main(args):
   monitor(ymeteo1,ymeteo2,**kwargs)
   
   # DISCONNECT
-  print "Closing connection..."
+  print("Closing connection...")
   disconnectYoctoMeteo()
   
 

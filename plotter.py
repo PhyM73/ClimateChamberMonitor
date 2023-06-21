@@ -32,9 +32,9 @@ def setTimeAxisMinorLocators(axis,twidth=None):
   elif twidth>135:
     axis.xaxis.set_minor_locator(mdates.SecondLocator(bysecond=[0,20,40]))
   elif twidth>80:
-    axis.xaxis.set_minor_locator(mdates.SecondLocator(bysecond=[i*10 for i in xrange(6)]))
+    axis.xaxis.set_minor_locator(mdates.SecondLocator(bysecond=[i*10 for i in range(6)]))
   else:
-    axis.xaxis.set_minor_locator(mdates.SecondLocator(bysecond=[i*2 for i in xrange(30)]))
+    axis.xaxis.set_minor_locator(mdates.SecondLocator(bysecond=[i*2 for i in range(30)]))
   
 
 def plotter(**kwargs):
@@ -61,7 +61,7 @@ def plotter(**kwargs):
   tempvals_YM1, tempvals_YM2, dewpvals_YM1, dewpvals_YM2 = [ ], [ ], [ ], [ ]
   runvals, airvals, dryvals = [ ], [ ], [ ]
   if os.path.isfile(logname):
-    print "Loading old monitoring data from '%s'..."%(logname)
+    print("Loading old monitoring data from '%s'..."%(logname))
     with open(logname,'r') as logfile:
       logreader = csv.reader(logfile)
       tnow   = datetime.datetime.now()
@@ -93,7 +93,7 @@ def plotter(**kwargs):
   tmax = tlast + dtmargin
   
   # PLOT
-  print "Making plot '%s'..."%figname
+  print("Making plot '%s'..."%figname)
   fig   = plt.figure(figsize=(10,6),dpi=100)
   grid  = gridspec.GridSpec(2,1,height_ratios=[1,3],hspace=0.04,left=0.07,right=0.96,top=0.92,bottom=0.08)
   

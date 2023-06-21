@@ -46,16 +46,16 @@ def checkProgram(chamber,prgmid):
 def startProgram(chamber,prgmid,nruns=1):
   """Start manual run."""
   checkProgram(chamber,prgmid)
-  print "Starting program %s..."%(prgmid)
+  print("Starting program %s..."%(prgmid))
   chamber.sendSimServCmd('START PRGM',[prgmid,nruns])
   time.sleep(2)
   prgmname = str(chamber.sendSimServCmd('GET PRGM NAME')[0])
-  print "Started pogram '%s'"%(prgmname)
+  print("Started pogram '%s'"%(prgmname))
   
 
 def stopProgram(chamber):
   """Stop manual run."""
-  print "Stopping program..."
+  print("Stopping program...")
   chamber.sendSimServCmd('STOP PRGM')
   
 
@@ -65,7 +65,7 @@ def main(args):
   args.batchmode = not checkGUIMode(args.batchmode)
   
   # CONNECT
-  print "Connecting to climate chamber..."
+  print("Connecting to climate chamber...")
   chamber = connectClimateChamber()
   ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
   ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
@@ -79,7 +79,7 @@ def main(args):
   stopProgram(chamber)
   
   # DISCONNECT
-  print "Closing connection..."
+  print("Closing connection...")
   chamber.disconnect()
   disconnectYoctoMeteo()
   

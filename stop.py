@@ -46,7 +46,7 @@ def main(args):
   args.monitor = checkGUIMode(not args.monitor)
   
   # CONNECT
-  print "Connecting to climate chamber..."
+  print("Connecting to climate chamber...")
   chamber = connectClimateChamber()
   ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
   ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
@@ -60,7 +60,7 @@ def main(args):
                  nsamples=args.nsamples,tstep=args.stepsize,twidth=args.twidth)
   
   # DISCONNECT
-  print "Closing connection..."
+  print("Closing connection...")
   chamber.disconnect()
   disconnectYoctoMeteo()
   

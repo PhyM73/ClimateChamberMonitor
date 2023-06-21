@@ -4,9 +4,9 @@ def ensureDirectory(dirname):
   """Make directory if it does not exist."""
   if not os.path.exists(dirname):
     os.makedirs(dirname)
-    print '>>> made directory "%s"'%(dirname)
+    print('>>> made directory "%s"'%(dirname))
     if not os.path.exists(dirname):
-      print '>>> failed to make directory "%s"'%(dirname)
+      print('>>> failed to make directory "%s"'%(dirname))
   return dirname
   
 
@@ -29,7 +29,7 @@ def warning(string,**kwargs):
   title  = kwargs.get('title',"")
   if title: pre = "%s%s: "%(pre,title)
   string = "%s%s\033[0m"%(pre,string)
-  print string.replace('\n','\n'+' '*(len(pre)-18))
+  print(string.replace('\n','\n'+' '*(len(pre)-18)))
   
 
 def checkGUIMode(batchmode):
@@ -37,6 +37,6 @@ def checkGUIMode(batchmode):
   if batchmode:
     return False
   if 'DISPLAY' not in os.environ:
-    print "Warning! Cannot open plot (no 'DISPLAY' environmental variable found). Running in batch mode..."
+    print("Warning! Cannot open plot (no 'DISPLAY' environmental variable found). Running in batch mode...")
     return False
   return True
