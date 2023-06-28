@@ -283,10 +283,10 @@ def checkActiveWarnings(client,**kwargs):
     nactive = 0
     if nmsg>0:
         for i in range(1,nmsg+1):
-        status = int(sendSimServCmd(client,'GET MSG STATUS',[i])[0])
-        mtype  = int(sendSimServCmd(client,'GET MSG TYPE',[i])[0])
-        if status==1 and mtype & kwargs.get('type',3): # alarm or warning
-            nactive += 1
+            status = int(sendSimServCmd(client,'GET MSG STATUS',[i])[0])
+            mtype  = int(sendSimServCmd(client,'GET MSG TYPE',[i])[0])
+            if status==1 and mtype & kwargs.get('type',3): # alarm or warning
+                nactive += 1
     return nactive
   
 
@@ -295,8 +295,8 @@ def checkInterlock(client,temp,dewp,warmup=False):
     if temp<dewp+5:
         warning("INTERLOCK! Temperature (%.2f\u00b0C) %s dewpoint (%.2f\u00b0C)!"%(temp,"lower than" if dewp>temp else "within 5\\u00b0C of",dewp))
         if warmup:
-        forceWarmUp(client)
-  
+            forceWarmUp(client)
+    
 
 def getActiveWarnings(client,**kwargs):
     """Get active messages; by default alarms and warnings only."""
@@ -306,9 +306,9 @@ def getActiveWarnings(client,**kwargs):
         status  = int(sendSimServCmd(client,'GET MSG STATUS',[i])[0])
         mtype   = int(sendSimServCmd(client,'GET MSG TYPE',[i])[0])
         if status==1 and mtype & kwargs.get('type',3): # alarm or warning
-        message = str(sendSimServCmd(client,'GET MSG TEXT',[i])[0])
-        mtext = "ALARM!" if mtype & 1 else "Warning!" if mtype & 2 else "Info:"
-        messages.append("%s %s"%(mtext,message))
+            message = str(sendSimServCmd(client,'GET MSG TEXT',[i])[0])
+            mtext = "ALARM!" if mtype & 1 else "Warning!" if mtype & 2 else "Info:"
+            messages.append("%s %s"%(mtext,message))
     return messages
   
 

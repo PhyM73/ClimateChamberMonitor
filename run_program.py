@@ -36,54 +36,53 @@ args = parser.parse_args()
 
 
 def checkProgram(chamber,prgmid):
-  """Check whether a program with given number exists,
-  and return name if it does, otherwise None."""
-  nprgm = chamber.sendSimServCmd('GET PRGM NUM')
-  assert prgmid<=nprgm, "Did not find program %d out of %d available programs"%(prgmid,nprgm)
-  return True
-  
+    """Check whether a program with given number exists,
+    and return name if it does, otherwise None."""
+    nprgm = chamber.sendSimServCmd('GET PRGM NUM')
+    assert prgmid<=nprgm, "Did not find program %d out of %d available programs"%(prgmid,nprgm)
+    return True
+
 
 def startProgram(chamber,prgmid,nruns=1):
-  """Start manual run."""
-  checkProgram(chamber,prgmid)
-  print("Starting program %s..."%(prgmid))
-  chamber.sendSimServCmd('START PRGM',[prgmid,nruns])
-  time.sleep(2)
-  prgmname = str(chamber.sendSimServCmd('GET PRGM NAME')[0])
-  print("Started pogram '%s'"%(prgmname))
-  
+    """Start manual run."""
+    checkProgram(chamber,prgmid)
+    print("Starting program %s..."%(prgmid))
+    chamber.sendSimServCmd('START PRGM',[prgmid,nruns])
+    time.sleep(2)
+    prgmname = str(chamber.sendSimServCmd('GET PRGM NAME')[0])
+    print("Started pogram '%s'"%(prgmname))
+
 
 def stopProgram(chamber):
-  """Stop manual run."""
-  print("Stopping program...")
-  chamber.sendSimServCmd('STOP PRGM')
-  
+    """Stop manual run."""
+    print("Stopping program...")
+    chamber.sendSimServCmd('STOP PRGM')
+
 
 def main(args):
-  
-  # CHECKS
-  args.batchmode = not checkGUIMode(args.batchmode)
-  
-  # CONNECT
-  print("Connecting to climate chamber...")
-  chamber = connectClimateChamber()
-  ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
-  ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
-  
-  # RUN & MONITOR
-  prgmid    = args.prgmid
-  nruns     = args.nruns
-  startProgram(chamber,prgmid,nruns)
-  monitor(chamber,ymeteo1,ymeteo2,batch=args.batchmode,out=args.output,
-                 nsamples=args.nsamples,tstep=args.stepsize,twidth=args.twidth)
-  stopProgram(chamber)
-  
-  # DISCONNECT
-  print("Closing connection...")
-  chamber.disconnect()
-  disconnectYoctoMeteo()
-  
+
+    # CHECKS
+    args.batchmode = not checkGUIMode(args.batchmode)
+
+    # CONNECT
+    print("Connecting to climate chamber...")
+    chamber = connectClimateChamber()
+    ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
+    ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
+
+    # RUN & MONITOR
+    prgmid    = args.prgmid
+    nruns     = args.nruns
+    startProgram(chamber,prgmid,nruns)
+    monitor(chamber,ymeteo1,ymeteo2,batch=args.batchmode,out=args.output,
+                   nsamples=args.nsamples,tstep=args.stepsize,twidth=args.twidth)
+    stopProgram(chamber)
+
+    # DISCONNECT
+    print("Closing connection...")
+    chamber.disconnect()
+    disconnectYoctoMeteo()
+
 
 if __name__ == '__main__':
-  main(args)
-  
+    main(args)

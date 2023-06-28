@@ -3,7 +3,7 @@
 import os, sys
 sys.path.append(os.path.dirname(__file__))
 from batch_chamber_commands import connectClimateChamber, defaultip,\
-                             getRunStatus, checkActiveWarnings, getActiveWarnings
+                            getRunStatus, checkActiveWarnings, getActiveWarnings
 
 def addRow(col1,col2="",just=38):
     return '\n    ' + col1.ljust(just) + '  ' + col2.ljust(just)

@@ -52,25 +52,25 @@ def startManualRun(chamber,target=20.0,gradient=3,air=True,dryer=True):
     chamber.sendSimServCmd('SET DIGI_OUT VAL',[8,int(dryer)])  # DRYER ON
     print("Starting manual run...")
     chamber.sendSimServCmd('START MANUAL',[1,1])
-    
+
 
 def stopManualRun(chamber):
     """Stop manual run."""
     print("Stopping manual run...")
     chamber.sendSimServCmd('START MANUAL',[1,0])
-  
+
 
 def main(args):
-  
+
     # CHECKS
     args.batchmode = not checkGUIMode(args.batchmode)
-    
+
     # CONNECT
     print("Connecting to climate chamber...")
     chamber = connectClimateChamber()
     ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
     ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
-    
+
     # RUN & MONITOR
     target   = args.target
     gradient = args.gradient
@@ -80,13 +80,12 @@ def main(args):
     monitor(chamber,ymeteo1,ymeteo2,batch=args.batchmode,out=args.output,
                     nsamples=args.nsamples,tstep=args.stepsize,twidth=args.twidth)
     stopManualRun(chamber)
-    
+
     # DISCONNECT
     print("Closing connection...")
     chamber.disconnect()
     disconnectYoctoMeteo()
-  
+
 
 if __name__ == '__main__':
     main(args)
-  
