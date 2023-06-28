@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/home/tepx/Packages/miniconda3/envs/device/bin/python
 # coding: latin-1
 # e.g.
 #  python run_manual.py -T 28 -g 4
@@ -14,6 +14,7 @@ from chamber_commands import connectClimateChamber, sendSimServCmd, unpackSimSer
 import yocto_commands as YOCTO
 from yocto_commands import connectYoctoMeteo, disconnectYoctoMeteo
 from argparse import ArgumentParser
+import subprocess
 description = '''Stop running the climate chamber.'''
 parser = ArgumentParser(prog="stop",description=description,epilog="Good luck!")
 parser.add_argument('-W', '--warmup',    dest='warmup', default=False, action='store_true',
@@ -39,12 +40,34 @@ parser.add_argument('-v', '--verbose',   dest='verbose', default=False, action='
 args = parser.parse_args()
 
 
+def the_power_supply_is_off():
+  if os.path.exists("ps-control"):
+    process = subprocess.Popen('sudo ./ps-control/scripts/TTi_utils.py', stdout=subprocess.PIPE, shell=True)
+    output, _ = process.communicate()
+    output = output.decode('utf-8')
+    return ("O1:Off" in output and "O2:Off" in output)
+
+def the_high_voltage_is_off():
+  if os.path.exists("ps-control"):
+    process = subprocess.Popen('sudo ./ps-control/scripts/quick_check_keithley.py', stdout=subprocess.PIPE, shell=True)
+    output, _ = process.communicate()
+    output = output.decode('utf-8')
+    return ("The high voltage output is Off" in output)
+
 
 def main(args):
   
   # CHECKS
   args.monitor = checkGUIMode(not args.monitor)
-  
+
+  if not the_high_voltage_is_off():
+    print("The high voltage is on, please turn off it first.")
+    exit()
+
+  if not the_power_supply_is_off():
+    print("The power supply is on, please turn off it first.")
+    exit()
+
   # CONNECT
   print("Connecting to climate chamber...")
   chamber = connectClimateChamber()
