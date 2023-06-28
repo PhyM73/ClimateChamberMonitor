@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/home/tepx/Packages/miniconda3/envs/device/bin/python
 # coding: latin-1
 import os, sys, time, datetime
 import socket
@@ -43,28 +43,33 @@ def getCurrentStatus(**kwargs):
   # SETTINGS
   ip       = kwargs.get('ip',  defaultip    )
   logname  = kwargs.get('out', "status.txt" )
+  verbose  = kwargs.get('verbose', False )
   tformat  = '%d-%m-%Y %H:%M:%S'
   
   # CONNECT
-  print("Connecting to climate chamber...")
+  if verbose:
+    print("Connecting to climate chamber...")
   chamber = connectClimateChamber(ip=ip)
   ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
   ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
   
   # GET STATUS
-  print("Checking status...")
+  if verbose:
+    print("Checking status...")
   tnow = datetime.datetime.now()
   nalarms, nwarns, nmsgs = 0, 0, 0
   if chamber==None:
     string  = "  Climate chamber not found in network."
-    string += addRow("IP address:  %s"%(ip))
-    string += addRow("Time stamp:  %s"%(tnow.strftime(tformat)))
+    if verbose:
+      string += addRow("IP address:  %s"%(ip))
+      string += addRow("Time stamp:  %s"%(tnow.strftime(tformat)))
     string += addRow("Setpoint:    ", "Compr. air:  ")
     string += addRow("Temperature: ", "Dryer:       ")
-    string += addRow("Temp. YM1:   ", "Messages:    ")
-    string += addRow("Temp. YM2:   ", "Warnings:    ")
-    string += addRow("Dewp. YM1:   ", "Alarms:      ")
-    string += addRow("Dewp. YM2:   ")
+    if verbose:
+      string += addRow("Temp. YM1:   ", "Messages:    ")
+      string += addRow("Temp. YM2:   ", "Warnings:    ")
+      string += addRow("Dewp. YM1:   ", "Alarms:      ")
+      string += addRow("Dewp. YM2:   ")
   else:
     temp_YM1, temp_YM2, dewp_YM1, dewp_YM2 = "", "", "", ""
     if ymeteo1:
@@ -76,28 +81,32 @@ def getCurrentStatus(**kwargs):
     nalarms  = checkActiveWarnings(chamber,type=1)
     nwarns   = checkActiveWarnings(chamber,type=2)
     nmsgs    = checkActiveWarnings(chamber,type=4)
-    string   = "  Climate chamber's currect status: %s"%(getRunStatus(chamber))
-    string  += addRow("IP address:  %s"%(ip))
-    string  += addRow("Time stamp:  %s"%(tnow.strftime(tformat)))
+    string   = "Climate chamber's currect status: %s"%(getRunStatus(chamber))
+    if verbose:
+      string  += addRow("IP address:  %s"%(ip))
+      string  += addRow("Time stamp:  %s"%(tnow.strftime(tformat)))
     string  += addRow("Setpoint:    %8.3f"%(chamber.getSetp()),
                       "Compr. air:  %4s"%('ON' if chamber.getAir()==1 else 'OFF'))
     string  += addRow("Temperature: %8.3f"%(chamber.getTemp()),
                       "Dryer:       %4s"%('ON' if chamber.getDryer()==1 else 'OFF'))
-    string  += addRow("Temp. YM1:   %8s"%(temp_YM1),
+    if verbose:
+        string  += addRow("Temp. YM1:   %8s"%(temp_YM1),
                       "Messages:    %4d"%(nmsgs))
-    string  += addRow("Temp. YM2:   %8s"%(temp_YM2),
+        string  += addRow("Temp. YM2:   %8s"%(temp_YM2),
                       "Warnings:    %4d"%(nwarns))
-    string  += addRow("Dewp. YM1:   %8s"%(dewp_YM1),
+        string  += addRow("Dewp. YM1:   %8s"%(dewp_YM1),
                       "Alarms:      %4d"%(nalarms))
-    string  += addRow("Dewp. YM2:   %8s"%(dewp_YM2))
-  print("Status check finished!")
+        string  += addRow("Dewp. YM2:   %8s"%(dewp_YM2))
+  
+  if verbose:
+        print("Status check finished!")
   
   # WRITE STATUS
   if logname:
     with open(logname,'w+') as logfile:
-      print("Writing to '%s'"%logname)
       print(string)
-      print("Writing status to '%s'..."%logname)
+      if verbose:
+        print("Writing status to '%s'..."%logname)
       logfile.write(string)
     if nalarms>0:
       messages = getActiveWarnings(chamber,type=1)
@@ -110,7 +119,8 @@ def getCurrentStatus(**kwargs):
       writeMessages(logname,messages,tag="messages")
   
   # DISCONNECT
-  print("Closing connection...")
+  if verbose:
+    print("Closing connection...")
   chamber.disconnect()
   disconnectYoctoMeteo()
   
@@ -118,7 +128,7 @@ def getCurrentStatus(**kwargs):
 def main(args):
   
   # CHECK STATUS
-  getCurrentStatus(out=args.output)
+  getCurrentStatus(out=args.output, verbose=args.verbose)
   
 
 if __name__ == '__main__':
