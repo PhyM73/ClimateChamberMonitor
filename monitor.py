@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/home/tepx/Packages/miniconda3/envs/device/bin/python
 # coding: latin-1
 # e.g.
 #  python monitor.py -n 10 -s 4 -T 28 -g 4
