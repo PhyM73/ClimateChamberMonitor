@@ -41,53 +41,53 @@ args = parser.parse_args()
 
 
 def the_power_supply_is_off():
-  if os.path.exists("ps-control"):
-    process = subprocess.Popen('sudo ./ps-control/scripts/TTi_utils.py', stdout=subprocess.PIPE, shell=True)
-    output, _ = process.communicate()
-    output = output.decode('utf-8')
-    return ("O1:Off" in output and "O2:Off" in output)
+    if os.path.exists("ps-control"):
+        process = subprocess.Popen('sudo ./ps-control/scripts/TTi_utils.py', stdout=subprocess.PIPE, shell=True)
+        output, _ = process.communicate()
+        output = output.decode('utf-8')
+        return ("O1:Off" in output and "O2:Off" in output)
 
 def the_high_voltage_is_off():
-  if os.path.exists("ps-control"):
-    process = subprocess.Popen('sudo ./ps-control/scripts/quick_check_keithley.py', stdout=subprocess.PIPE, shell=True)
-    output, _ = process.communicate()
-    output = output.decode('utf-8')
-    return ("The high voltage output is Off" in output)
+    if os.path.exists("ps-control"):
+        process = subprocess.Popen('sudo ./ps-control/scripts/quick_check_keithley.py', stdout=subprocess.PIPE, shell=True)
+        output, _ = process.communicate()
+        output = output.decode('utf-8')
+        return ("The high voltage output is Off" in output)
 
 
 def main(args):
   
-  # CHECKS
-  args.monitor = checkGUIMode(not args.monitor)
+    # CHECKS
+    args.monitor = checkGUIMode(not args.monitor)
 
-  if not the_high_voltage_is_off():
-    print("The high voltage is on, please turn off it first.")
-    exit()
+    if not the_high_voltage_is_off():
+        print("The high voltage is on, please turn off it first.")
+        exit()
 
-  if not the_power_supply_is_off():
-    print("The power supply is on, please turn off it first.")
-    exit()
+    if not the_power_supply_is_off():
+        print("The power supply is on, please turn off it first.")
+        exit()
 
-  # CONNECT
-  print("Connecting to climate chamber...")
-  chamber = connectClimateChamber()
-  ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
-  ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
-  
-  # STOP & MONITOR
-  if args.warmup:
-    chamber.forceWarmUp(args.target,args.gradient)
-  else:
-    chamber.stop()
-  monitor(chamber,ymeteo1,ymeteo2,batch=args.monitor,out=args.output,
-                 nsamples=args.nsamples,tstep=args.stepsize,twidth=args.twidth)
-  
-  # DISCONNECT
-  print("Closing connection...")
-  chamber.disconnect()
-  disconnectYoctoMeteo()
+    # CONNECT
+    print("Connecting to climate chamber...")
+    chamber = connectClimateChamber()
+    ymeteo1 = connectYoctoMeteo(YOCTO.ymeteo1)
+    ymeteo2 = connectYoctoMeteo(YOCTO.ymeteo2)
+    
+    # STOP & MONITOR
+    if args.warmup:
+        chamber.forceWarmUp(args.target,args.gradient)
+    else:
+        chamber.stop()
+    monitor(chamber,ymeteo1,ymeteo2,batch=args.monitor,out=args.output,
+                    nsamples=args.nsamples,tstep=args.stepsize,twidth=args.twidth)
+    
+    # DISCONNECT
+    print("Closing connection...")
+    chamber.disconnect()
+    disconnectYoctoMeteo()
   
 
 if __name__ == '__main__':
-  main(args)
+    main(args)
   
